@@ -13,8 +13,10 @@ namespace dev_backend.Models
         [Required(ErrorMessage = "Obrigatório Informar a placa!")]
         public int Placa { get; set; }
         [Required(ErrorMessage = "Obrigatório Informar o Ano de Fabricação!")]
+        [Display(Name = "Ano de Fabricação")]
         public int AnoFabricação { get; set; }
         [Required(ErrorMessage = "Obrigatório Informar o Ano do Modelo!")]
+        [Display(Name = "Ano do Modelo")]
         public int AnoModelo { get; set; }
     }
 }
