@@ -1,5 +1,6 @@
 ﻿using dev_backend.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -9,6 +10,7 @@ using System.Security.Claims;
 
 namespace dev_backend.Controllers
 {
+   [Authorize(Roles = "Admin")]
     public class UsuariosController : Controller
     {
         private readonly AppDbContext _context;
@@ -22,13 +24,19 @@ namespace dev_backend.Controllers
         {
             return View(await _context.Usuarios.ToListAsync());
         }
-
+        [AllowAnonymous]
+       public IActionResult AccessDenied()
+        {
+            return View();
+        }
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(Usuario usuario)
         {
             var dados = await _context.Usuarios.FindAsync(usuario.Id);
@@ -69,14 +77,14 @@ namespace dev_backend.Controllers
             }
             return View();
         }
-
+        [AllowAnonymous]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
 
             return RedirectToAction("Login", "Usuarios");
         }
-
+       
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Usuarios == null)
